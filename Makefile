@@ -86,6 +86,8 @@ libdc-local64 := $(wildcard /usr/local/lib64/libdivecomputer.a)
 libdc-usr := $(wildcard /usr/lib/libdivecomputer.a)
 libdc-usr64 := $(wildcard /usr/lib64/libdivecomputer.a)
 
+LIBDCDEVEL=1
+
 ifneq ($(LIBDCDEVEL),)
 	LIBDIVECOMPUTERDIR = ../libdivecomputer
 	LIBDIVECOMPUTERINCLUDES = -I$(LIBDIVECOMPUTERDIR)/include
