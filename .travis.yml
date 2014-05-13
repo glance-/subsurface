@@ -3,7 +3,11 @@ notifications:
         recipients:
             - glance@acc.umu.se
 
-# Flip these two to build on mac vs linux
+# This makes us build on both linux and osx
+os:
+    - linux
+    - osx
+
 language:
     - cpp
     - objective-c
@@ -29,5 +33,6 @@ install:
 
 script:
     - qmake LIBDCDEVEL=1 V=1
+    - if [ "$(uname)" = "Darwin" ] ; then make doc ; fi
     - make
     - if [ "$(uname)" = "Darwin" ] ; then sudo make mac-deploy ; fi
