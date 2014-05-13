@@ -13,9 +13,8 @@ language:
     - objective-c
 
 install:
-    - if [ "$(uname)" = "Linux" ] && [ "$(lsb_release -r | cut -f 2-2)" = "12.04" ] ; then sudo add-apt-repository -y ppa:xav0989/libgit2 ; fi
-    - if [ "$(uname)" = "Linux" ] ; then sudo apt-get update ; sudo apt-get install libqt4-dev qt4-qmake libxml2-dev libsqlite3-dev libxslt1-dev libzip-dev libusb-1.0-0-dev libmarble-dev libgit2-dev ; fi
-    - if [ "$(uname)" = "Darwin" ] ; then brew install asciidoc libzip qt sqlite cmake libusb pkg-config libgit2 ; brew link --force sqlite ; fi
+    - if [ "$(uname)" = "Linux" ] ; then sudo apt-get update ; sudo apt-get install libqt4-dev qt4-qmake libxml2-dev libsqlite3-dev libxslt1-dev libzip-dev libusb-1.0-0-dev libmarble-dev cmake libssh2-1-dev ; fi
+    - if [ "$(uname)" = "Darwin" ] ; then brew install asciidoc libzip qt sqlite cmake libusb pkg-config ; brew link --force sqlite ; fi
     - if [ "$(uname)" = "Darwin" ] ; then (
       git clone --depth 10 -b KDE/4.11 git://anongit.kde.org/marble ../marble/sources;
       mkdir ../marble/build;
@@ -28,11 +27,13 @@ install:
       mkdir -p /usr/local/include/marble;
       cp $(find ../../../sources/src/lib -name '*.h') /usr/local/include/marble/;
       ) fi
+    - git clone --depth 10 git://github.com/libgit2/libgit2.git ../libgit2
+    - ( mkdir ../libgit2/build ; cd ../libgit2/build ; cmake .. && make )
     - git clone --depth 10 git://git.libdivecomputer.org/libdivecomputer.git ../libdivecomputer
     - ( cd ../libdivecomputer ; autoreconf -i && ./configure && make )
 
 script:
-    - qmake LIBDCDEVEL=1 V=1
+    - qmake LIBGIT2DEVEL=../libgit2 CONFIG+=libgit21-api LIBDCDEVEL=1 V=1
     - if [ "$(uname)" = "Darwin" ] ; then make doc ; fi
     - make
     - if [ "$(uname)" = "Darwin" ] ; then sudo make mac-deploy ; fi
