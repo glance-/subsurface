@@ -47,11 +47,11 @@ QVariant DivePlotDataModel::data(const QModelIndex &index, int role) const
 		case SAC:
 			return item.sac;
 		case PN2:
-			return item.pn2;
+			return (double) item.pn2.mbar / 1000.0;
 		case PHE:
-			return item.phe;
+			return (double) item.phe.mbar / 1000.0;
 		case PO2:
-			return item.po2;
+			return (double) item.po2.mbar / 1000.0;
 		case HEARTBEAT:
 			return item.heartbeat;
 		}
@@ -154,17 +154,17 @@ unsigned int DivePlotDataModel::dcShown() const
 #define MAX_PPGAS_FUNC(GAS, GASFUNC)                                  \
 	double DivePlotDataModel::GASFUNC()                           \
 	{                                                             \
-		double ret = -1;                                      \
+		int ret = -1;                                         \
 		for (int i = 0, count = rowCount(); i < count; i++) { \
 			if (pInfo.entry[i].GAS > ret)                 \
 				ret = pInfo.entry[i].GAS;             \
 		}                                                     \
-		return ret;                                           \
+		return (double) ret / 1000.0;                         \
 	}
 
-MAX_PPGAS_FUNC(phe, pheMax);
-MAX_PPGAS_FUNC(pn2, pn2Max);
-MAX_PPGAS_FUNC(po2, po2Max);
+MAX_PPGAS_FUNC(phe.mbar, pheMax);
+MAX_PPGAS_FUNC(pn2.mbar, pn2Max);
+MAX_PPGAS_FUNC(po2.mbar, po2Max);
 
 void DivePlotDataModel::emitDataChanged()
 {

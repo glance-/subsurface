@@ -1,6 +1,8 @@
 #ifndef PROFILE_H
 #define PROFILE_H
 
+#include "units.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -35,8 +37,8 @@ struct plot_data {
 	int cns;
 	int smoothed;
 	int sac;
-	double po2, pn2, phe;
-	double mod, ead, end, eadd;
+	pressure_t po2, pn2, phe;
+	depth_t mod, ead, end, eadd;
 	velocity_t velocity;
 	int speed;
 	struct plot_data *min[3];
