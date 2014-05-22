@@ -8,9 +8,11 @@ os:
     - linux
     - osx
 
-language:
-    - cpp
-    - objective-c
+language: c++
+
+compiler:
+    - clang
+    - gcc
 
 install:
     - if [ "$(uname)" = "Linux" ] ; then sudo apt-get update ; sudo apt-get install libqt4-dev qt4-qmake libxml2-dev libsqlite3-dev libxslt1-dev libzip-dev libusb-1.0-0-dev libmarble-dev cmake libssh2-1-dev ; fi
@@ -33,7 +35,7 @@ install:
     - ( cd ../libdivecomputer ; autoreconf -i && ./configure && make )
 
 script:
-    - qmake LIBGIT2DEVEL=../libgit2 CONFIG+=libgit21-api LIBDCDEVEL=1 V=1
+    - qmake LIBGIT2DEVEL=../libgit2 CONFIG+=libgit21-api LIBDCDEVEL=1 V=1 QMAKE_CC=$CC QMAKE_CXX=$CXX
     - if [ "$(uname)" = "Darwin" ] ; then make doc ; fi
     - make
     - if [ "$(uname)" = "Darwin" ] ; then sudo make mac-deploy ; fi
