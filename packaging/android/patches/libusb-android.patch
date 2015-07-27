@@ -1,0 +1,48 @@
+diff -ur libusb-1.0.19.orig/libusb/libusb.h libusb-1.0.19/libusb/libusb.h
+--- libusb-1.0.19.orig/libusb/libusb.h	2014-06-13 20:31:35.000000000 +0200
++++ libusb-1.0.19/libusb/libusb.h	2015-07-24 00:44:11.773731002 +0200
+@@ -1991,6 +1991,14 @@
+ void LIBUSB_CALL libusb_hotplug_deregister_callback(libusb_context *ctx,
+ 						libusb_hotplug_callback_handle handle);
+ 
++#ifdef __ANDROID__
++typedef int (*libusb_android_open_callback_func)(uint16_t idVendor, uint16_t idProduct);
++/* Make the darn thing ifdef'able */
++#define libusb_android_open_callback_func libusb_android_open_callback_func
++
++void libusb_set_android_open_callback(libusb_android_open_callback_func aocf);
++#endif
++
+ #ifdef __cplusplus
+ }
+ #endif
+diff -ur libusb-1.0.19.orig/libusb/os/linux_usbfs.c libusb-1.0.19/libusb/os/linux_usbfs.c
+--- libusb-1.0.19.orig/libusb/os/linux_usbfs.c	2014-06-13 20:31:35.000000000 +0200
++++ libusb-1.0.19/libusb/os/linux_usbfs.c	2015-07-24 00:45:28.452379300 +0200
+@@ -179,6 +179,14 @@
+ 	int iso_packet_offset;
+ };
+ 
++#ifdef __ANDROID__
++static libusb_android_open_callback_func _android_open_callback = NULL;
++
++void libusb_set_android_open_callback(libusb_android_open_callback_func aocf) {
++	_android_open_callback = aocf;
++}
++#endif
++
+ static int _get_usbfs_fd(struct libusb_device *dev, mode_t mode, int silent)
+ {
+ 	struct libusb_context *ctx = DEVICE_CTX(dev);
+@@ -193,6 +201,11 @@
+ 		snprintf(path, PATH_MAX, "%s/%03d/%03d",
+ 			usbfs_path, dev->bus_number, dev->device_address);
+ 
++#ifdef __ANDROID__
++	if (_android_open_callback)
++		fd = _android_open_callback(dev->device_descriptor.idVendor, dev->device_descriptor.idProduct);
++	else
++#endif
+ 	fd = open(path, mode);
+ 	if (fd != -1)
+ 		return fd; /* Success */
