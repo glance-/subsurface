@@ -1,0 +1,49 @@
+notifications:
+    email:
+        recipients:
+            - glance@acc.umu.se
+
+language: android
+
+android:
+      components:
+          # use the latest revision of Android SDK Tools
+          - platform-tools
+          - tools
+          - android-23
+
+cache:
+    directories:
+        - android-ndk-r12
+        - $HOME/Qt
+
+addons:
+    apt:
+        packages:
+            - intltool
+            - autopoint
+            - p7zip
+
+env:
+    - TARGET="arm"
+    - TARGET="x86"
+
+before_install:
+    - if [ ! -e android-ndk-r12/toolchains ] ; then
+        curl -Lk http://dl.google.com/android/repository/android-ndk-r12-linux-x86_64.zip -o android-ndk.zip ;
+        unzip -q android-ndk.zip ;
+      fi
+    - export ANDROID_NDK_ROOT=$PWD/android-ndk-r12
+    - if [ ! -e $HOME/Qt/5.7 ] ; then
+          wget http://download.qt.io/official_releases/qt/5.7/5.7.0/qt-opensource-linux-x64-android-5.7.0.run ;
+          chmod +x ./qt-opensource-linux-x64-android-5.7.0.run ;
+          ./qt-opensource-linux-x64-android-5.7.0.run -platform minimal --script qt-installer-noninteractive.qs --no-force-installations ;
+      fi
+    - export QT5_ANDROID=$HOME/Qt/5.7
+
+script:
+    # Stupid Precise wget don't understand modern certs
+    - perl -pi -e 's/wget /wget --no-check-certificate /' packaging/android/build.sh
+    - mkdir android-build-$TARGET
+    - cd android-build-$TARGET
+    - bash ../packaging/android/build.sh $TARGET
