@@ -21,7 +21,7 @@
 #
 # Or just set QT5_ANDROID, ANDROID_SDK_ROOT and ANDROID_NDK_ROOT to where ever you have them.
 #
-set -e
+set -eu
 PLATFORM=$(uname)
 # (trick to get the absolute path, either if we're called with a
 # absolute path or a relative path)
@@ -29,29 +29,48 @@ pushd "$(dirname "$0")/../../"
 export SUBSURFACE_SOURCE=$PWD
 popd
 
+# Set build defaults
 # is this a release or debug build
 BUILD_TYPE=Debug
-if [ "$1" = "release" ] || [ "$1" = "Release" ] ; then
-	shift
-	BUILD_TYPE=Release
-fi
-if [ "$1" = "debug" ] || [ "$1" = "Debug" ] ; then
-	# this is the default - still need to eat the argument if given
-	shift
-fi
+# Build-nr in the android manifest.
+BUILD_NR="\"0\""
+# Should we build the desktop ui or the mobile ui?
+SUBSURFACE_DESKTOP=OFF
+# Which arch should we build for?
+export ARCH=arm
 
-if [ "$1" = "-buildnr" ] ; then
-	shift
-	BUILD_NR="\"$1\""
-	shift
-else
-	BUILD_NR="\"0\""
+# FIXME clean this up
+if [ "$#" -gt 0 ] ; then
+	set +u
+	if [ "$1" = "release" ] || [ "$1" = "Release" ] ; then
+		shift
+		BUILD_TYPE=Release
+	fi
+	if [ "$1" = "debug" ] || [ "$1" = "Debug" ] ; then
+		# this is the default - still need to eat the argument if given
+		shift
+	fi
+	if [ "$1" = "-buildnr" ] ; then
+		shift
+		BUILD_NR="\"$1\""
+		shift
+	fi
+	if [ "$1" = "desktop" ] ; then
+		SUBSURFACE_DESKTOP=ON
+		shift
+	fi
+	# arm or x86
+	if [ "$1" = "arm" ] || [ "$1" = "x86" ] ; then
+		export ARCH=$1
+		shift
+	fi
+	set -u
 fi
 
 # Configure where we can find things here
 export ANDROID_NDK_ROOT=${ANDROID_NDK_ROOT-$SUBSURFACE_SOURCE/../android-ndk-r13b}
 
-if [ ! -z "$QT5_ANDROID" ] ; then
+if [ -n "${QT5_ANDROID+X}" ] ; then
 	echo "Using Qt5 in $QT5_ANDROID"
 elif [ -d "$SUBSURFACE_SOURCE/../Qt/5.7" ] ; then
 	export QT5_ANDROID=$SUBSURFACE_SOURCE/../Qt/5.7
@@ -81,14 +100,6 @@ LIBGIT2_VERSION=0.24.1
 LIBUSB_VERSION=1.0.20
 OPENSSL_VERSION=1.0.2h
 LIBFTDI_VERSION=1.3
-
-# arm or x86
-if [ "$1" = "arm" ] || [ "$1" = "x86" ] ; then
-	export ARCH=$1
-	shift
-else
-	export ARCH=arm
-fi
 
 if [ "$ARCH" = "arm" ] ; then
 	QT_ARCH="armv7"
@@ -326,6 +337,7 @@ if [ ! -z "$SUBSURFACE_MOBILE" ] ; then
 	cd subsurface-mobile-build-$ARCH
 	MOBILE_CMAKE="-DSUBSURFACE_TARGET_EXECUTABLE=MobileExecutable"
 else
+	MOBILE_CMAKE=""
 	mkdir -p subsurface-build-$ARCH
 	cd subsurface-build-$ARCH
 fi
@@ -360,7 +372,7 @@ cmake $MOBILE_CMAKE \
 	-DFTDISUPPORT=${FTDI} \
 	-DANDROID_NATIVE_LIBSSL="$BUILDROOT/ndk-$ARCH/sysroot/usr/lib/libssl.so" \
 	-DANDROID_NATIVE_LIBCRYPT="$BUILDROOT/ndk-$ARCH/sysroot/usr/lib/libcrypto.so" \
-	"$SUBSURFACE_SOURCE"
+	"$SUBSURFACE_SOURCE" || true
 
 # set up the version number
 
