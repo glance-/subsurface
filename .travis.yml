@@ -37,7 +37,7 @@ before_install:
     - if [ ! -e $HOME/Qt/5.7 ] ; then
           wget http://download.qt.io/official_releases/qt/5.7/5.7.1/qt-opensource-linux-x64-android-5.7.1.run ;
           chmod +x ./qt-opensource-linux-x64-android-5.7.1.run ;
-          ./qt-opensource-linux-x64-android-5.7.1.run -platform minimal --script qt-installer-noninteractive.qs --no-force-installations ;
+          ./qt-opensource-linux-x64-android-5.7.1.run --platform minimal --script qt-installer-noninteractive.qs --no-force-installations ;
       fi
     - export QT5_ANDROID=$HOME/Qt/5.7
 
