@@ -10,11 +10,11 @@ android:
           # use the latest revision of Android SDK Tools
           - platform-tools
           - tools
-          - android-23
+          - android-25
 
 cache:
     directories:
-        - android-ndk-r12
+        - android-ndk-r13b
         - $HOME/Qt
 
 addons:
@@ -29,15 +29,15 @@ env:
     - TARGET="x86"
 
 before_install:
-    - if [ ! -e android-ndk-r12/toolchains ] ; then
-        curl -Lk http://dl.google.com/android/repository/android-ndk-r12-linux-x86_64.zip -o android-ndk.zip ;
+    - if [ ! -e android-ndk-r13b/toolchains ] ; then
+        curl -Lk http://dl.google.com/android/repository/android-ndk-r13b-linux-x86_64.zip -o android-ndk.zip ;
         unzip -q android-ndk.zip ;
       fi
-    - export ANDROID_NDK_ROOT=$PWD/android-ndk-r12
+    - export ANDROID_NDK_ROOT=$PWD/android-ndk-r13b
     - if [ ! -e $HOME/Qt/5.7 ] ; then
-          wget http://download.qt.io/official_releases/qt/5.7/5.7.0/qt-opensource-linux-x64-android-5.7.0.run ;
-          chmod +x ./qt-opensource-linux-x64-android-5.7.0.run ;
-          ./qt-opensource-linux-x64-android-5.7.0.run -platform minimal --script qt-installer-noninteractive.qs --no-force-installations ;
+          wget http://download.qt.io/official_releases/qt/5.7/5.7.1/qt-opensource-linux-x64-android-5.7.1.run ;
+          chmod +x ./qt-opensource-linux-x64-android-5.7.1.run ;
+          ./qt-opensource-linux-x64-android-5.7.1.run -platform minimal --script qt-installer-noninteractive.qs --no-force-installations ;
       fi
     - export QT5_ANDROID=$HOME/Qt/5.7
 
