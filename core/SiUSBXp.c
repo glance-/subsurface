@@ -31,7 +31,7 @@
  *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            *
  *                                                                        *
  *   Credits:                                                             *
- *   Many thanks to Michael Heubeck for all of the testing, debugging     * 
+ *   Many thanks to Michael Heubeck for all of the testing, debugging     *
  *   feedback, and for the original project idea.                         *
  *                                                                        *
  *   Version History:                                                     *
@@ -53,7 +53,7 @@
 
 /*Vendor ID / Product ID*/
 #define		SI_USB_VID                      0x10c4
-#define         SI_USB_PID                      0x8149
+#define		SI_USB_PID                      0x8149
 
 /*Return codes*/
 #define		SI_SUCCESS                      0x00
@@ -137,11 +137,11 @@ int SI_GetNumDevices(int *NumDevices) {
 
 	DBG("SI_GetNumDevices()\n");
 	init();
-    
-    	usb_find_busses();
-    	usb_find_devices();
-    
-    	busses = usb_get_busses();
+
+	usb_find_busses();
+	usb_find_devices();
+
+	busses = usb_get_busses();
 	
 	devcount=0;
 	for (bus = busses; bus; bus = bus->next) {
@@ -362,7 +362,7 @@ int SI_Close(struct SI_Private * Handle) {
 	DBG("  USB Ctrl Message retval=%i\n", usb_control_msg(Handle->udev, 0x40, 0x02, 0x0004, 0, NULL, 0, TXTimeout));	
 
 	usb_release_interface(Handle->udev, Handle->interface);
-    	usb_close(Handle->udev);
+	usb_close(Handle->udev);
 
 	Handle->magic=0;
 	free(Handle);
@@ -392,7 +392,7 @@ int SI_Read(struct SI_Private * Handle, char * Buffer, int BytesToRead, int * By
 		DBG("%02X", (unsigned char) Buffer[i]);
 	}
 	DBG("\"\n");
-	DBG("  Read %i bytes\n", *BytesReturned); 
+	DBG("  Read %i bytes\n", *BytesReturned);
 
 	return *BytesReturned>0?SI_SUCCESS:SI_READ_TIMED_OUT;
 }
@@ -418,7 +418,7 @@ int SI_Write(struct SI_Private * Handle, char * Buffer, int BytesToWrite, int * 
 	DBG("  Writing to device...\n");
 	*BytesWritten=usb_bulk_write(Handle->udev, Handle->ep_out, Buffer, BytesToWrite, TXTimeout);
 	SI_FillBuffer(Handle, 100);
-	DBG("  Wrote %i bytes\n", *BytesWritten); 
+	DBG("  Wrote %i bytes\n", *BytesWritten);
 
 
 	return SI_SUCCESS;
