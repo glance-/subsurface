@@ -469,7 +469,7 @@ static dc_status_t serial_ftdi_write (dc_custom_io_t *io, const void *data, size
 
 		// Calculate the expected duration (microseconds). A 2 millisecond fudge
 		// factor is added because it improves the success rate significantly.
-		unsigned long expected = 1000000.0 * device->nbits / device->baudrate * size + 0.5 + 2000;
+		unsigned long expected = 1000000 * device->nbits / device->baudrate * size + 2000;
 
 		// Wait for the remaining time.
 		if (elapsed < expected) {
