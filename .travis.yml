@@ -50,6 +50,7 @@ matrix:
             description: "Build submitted via Travis CI"
           notification_email: glance@acc.umu.se
           build_command: bash ${TRAVIS_BUILD_DIR}/scripts/${SUBSURFACE_PLATFORM}/travisbuild.sh
+          coverity_scan_run_condition: '"$SUBSURFACE_PLATFORM" = "linux" -a "$TRAVIS_EVENT_TYPE" = "cron"'
 
 #    - env: SUBSURFACE_PLATFORM="android"
 #      # Currently hard coded to arm
@@ -64,8 +65,6 @@ matrix:
 #              - 3pp
 
 before_install:
-    # When the build on this branch gets triggered by travis-cron, do a coverty scan.
-    - if [ "$TRAVIS_EVENT_TYPE" = "cron" ] ; then echo "TRAVIS_EVENT_TYPE=cron detected, setting COVERITY_SCAN_BRANCH=1" ; export COVERITY_SCAN_BRANCH=1 ; fi
     - source ${TRAVIS_BUILD_DIR}/scripts/${SUBSURFACE_PLATFORM}/before_install.sh
 
 script:
