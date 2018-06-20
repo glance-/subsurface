@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.subsurfacedivelog.mobile"
+    package="org.subsurfacedivelog.mobile.anton"
     android:installLocation="auto"
     android:versionCode="@BUILD_NR@"
     android:versionName="@SUBSURFACE_MOBILE_VERSION@" >
@@ -8,12 +8,12 @@
     <application
         android:name="org.qtproject.qt5.android.bindings.QtApplication"
         android:hardwareAccelerated="true"
-        android:label="@string/app_name"
+        android:label="Anton-ssrf"
         android:icon="@drawable/subsurface_mobile_icon" >
         <activity
             android:name="org.qtproject.qt5.android.bindings.QtActivity"
             android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|locale|fontScale|keyboard|keyboardHidden|navigation"
-            android:label="@string/app_name"
+            android:label="Anton-ssrf"
             android:theme="@style/AppTheme"
             android:launchMode="singleTop"
             android:windowSoftInputMode="adjustResize"
