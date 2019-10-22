@@ -2,10 +2,10 @@ name: iOS
 on:
   push:
     branches:
-    - master
+    - master-X
   pull_request:
     branches:
-    - master
+    - master-X
 
 jobs:
   mobileBuild:
