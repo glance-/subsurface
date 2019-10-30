@@ -4,10 +4,10 @@ on:
   push:
     branches:
     - master
-    paths:
-    - scripts/docker/android-build-container/Dockerfile
-    - scripts/docker/mxe-build-container/Dockerfile
-    - scripts/docker/trusty-qt512/Dockerfile
+#    paths:
+#    - scripts/docker/android-build-container/Dockerfile
+#    - scripts/docker/mxe-build-container/Dockerfile
+#    - scripts/docker/trusty-qt512/Dockerfile
 
 
 jobs:
