@@ -2,7 +2,7 @@ name: Windows
 on:
   push:
     branches:
-    - master-X
+    - master
   pull_request:
     branches:
     - master-X

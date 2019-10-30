@@ -2,7 +2,7 @@ name: Linux Qt 5.12
 on:
   push:
     branches:
-    - master-X
+    - master
   pull_request:
     branches:
     - master-X
