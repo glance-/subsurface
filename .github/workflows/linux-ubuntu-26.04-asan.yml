@@ -62,13 +62,14 @@ jobs:
         echo "--------------------------------------------------------------"
         echo "building desktop"
 
-        BUILD_EXTRA_ARGS=""
-        if [ "${GITHUB_EVENT_NAME}" = "push" ]; then
-          echo "Building a release version"
-          BUILD_EXTRA_ARGS="${BUILD_EXTRA_ARGS} -release"
-        fi
+        BUILD_EXTRA_ARGS="-build-tests"
+        #if [ "${GITHUB_EVENT_NAME}" = "push" ]; then
+        #  echo "Building a release version"
+        #  BUILD_EXTRA_ARGS="${BUILD_EXTRA_ARGS} -release"
+        #fi
 
         export CXXFLAGS=-fsanitize=address
+        export VERBOSE=1
 
         # now build for the desktop version (including WebKit)
         cd ..
